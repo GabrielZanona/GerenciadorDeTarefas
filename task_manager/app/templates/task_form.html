@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>{% if task %}Editar Tarefa{% else %}Nova Tarefa{% endif %}</h2>
+<form method="POST" action="{{ url_for('main.edit_task', id=task.id) if task else url_for('main.new_task') }}">
+    {{ form.hidden_tag() }}
+    <div class="form-group">
+        {{ form.title.label(class="form-label") }}
+        {{ form.title(class="form-control") }}
+    </div>
+    <div class="form-group">
+        {{ form.description.label(class="form-label") }}
+        {{ form.description(class="form-control") }}
+    </div>
+    <div class="form-group">
+        {{ form.status.label(class="form-label") }}
+        {{ form.status(class="form-control") }}
+    </div>
+    {% if not task or current_user == task.owner %}
+    <div class="form-group">
+        <label>Compartilhar tarefa com: (Não obrigatório)</label>
+        <div class="btn-group-toggle" data-toggle="buttons">
+            {% for user_id, username in form.shared_with.choices %}
+            <label class="btn btn-outline-primary">
+                <input type="checkbox" name="shared_with" value="{{ user_id }}"
+                {% if form.shared_with.data and user_id in form.shared_with.data %}checked{% endif %}>
+                {{ username }}
+            </label>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+    <button style="margin-top:30px" type="submit" class="btn btn-primary">
+        {% if task %}Editar{% else %}Criar{% endif %} Tarefa
+    </button>
+</form>
+{% endblock %}

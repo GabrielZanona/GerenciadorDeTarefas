@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="user-info-bar">
+    <span><i class="fas fa-user"></i> Usuário Logado: <strong>{{ current_user.username }}</strong></span>
+</div>
+
+<h2>Minhas Tarefas</h2>
+<a href="{{ url_for('main.new_task') }}" class="btn btn-success mb-3">Nova Tarefa</a>
+<ul class="list-group">
+    {% for task in user_tasks %}
+    <li class="list-group-item">
+        <strong>{{ task.title }}</strong> -
+        <span class="badge
+            {% if task.status == 'Pendente' %}badge-pendente{% elif task.status == 'Em Andamento' %}badge-em-andamento{% elif task.status == 'Concluída' %}badge-concluida{% endif %}">
+            {{ task.status }}
+        </span>
+        <p>Descrição da tarefa: {{ task.description }}</p>
+
+        {% if task.shared_with %}
+        <p><i class="fas fa-users"></i> Tarefa criada por {{ task.owner.username }} e compartilhada com:
+            {% for user in task.shared_with %}
+                {{ user.username }}{% if not loop.last %}, {% endif %}
+            {% endfor %}
+        </p>
+        {% else %}
+        <p><i class="fas fa-user"></i> Tarefa criada por: {{ task.owner.username }}</p>
+        {% endif %}
+
+        <div class="float-right">
+            <a href="{{ url_for('main.edit_task', id=task.id) }}" class="btn btn-sm btn-warning">Editar</a>
+            <form method="POST" action="{{ url_for('main.delete_task', id=task.id) }}" style="display:inline;">
+                <button type="submit" class="btn btn-sm btn-danger">Deletar</button>
+            </form>
+        </div>
+    </li>
+    {% endfor %}
+</ul>
+
+<h2 class="mt-5">Tarefas de Outros Usuários</h2>
+
+{% if tasks_shared_with_others or tasks_not_shared %}
+<ul class="list-group">
+    {% for task in tasks_shared_with_others %}
+    <li class="list-group-item">
+        <strong>{{ task.title }}</strong> -
+        <span class="badge
+            {% if task.status == 'Pendente' %}badge-pendente{% elif task.status == 'Em Andamento' %}badge-em-andamento{% elif task.status == 'Concluída' %}badge-concluida{% endif %}">
+            {{ task.status }}
+        </span>
+        <p>Descrição da tarefa: {{ task.description }}</p>
+        <p><i class="fas fa-users"></i> Tarefa criada por: {{ task.owner.username }} e compartilhada com:
+            {% for user in task.shared_with %}
+                {{ user.username }}{% if not loop.last %}, {% endif %}
+            {% endfor %}
+        </p>
+    </li>
+    {% endfor %}
+
+    {% for task in tasks_not_shared %}
+    <li class="list-group-item">
+        <strong>{{ task.title }}</strong> -
+        <span class="badge
+            {% if task.status == 'Pendente' %}badge-pendente{% elif task.status == 'Em Andamento' %}badge-em-andamento{% elif task.status == 'Concluída' %}badge-concluida{% endif %}">
+            {{ task.status }}
+        </span>
+        <p>Descrição da tarefa: {{ task.description }}</p>
+        <p><i class="fas fa-user"></i> Tarefa criada por: {{ task.owner.username }}</p>
+    </li>
+    {% endfor %}
+</ul>
+{% else %}
+
+<div class="empty-state">
+    <i class="fas fa-folder-open"></i>
+    <p>Não há nada para mostrar</p>
+</div>
+{% endif %}
+{% endblock %}
