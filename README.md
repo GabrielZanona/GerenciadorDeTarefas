@@ -9,7 +9,7 @@ tarefas a outros usuários, além de acompanhar o status das tarefas
 (pendente, em andamento, concluída).
 
 ESTE TRABALHO FOI FEITO POR :
-- Alexandre Junior Longhini
+- Alexandre Augusto Longhini Junior
 - Gabriel Landarin Zanona
 - Jon Albert Vianna
 
@@ -34,6 +34,9 @@ ESTE TRABALHO FOI FEITO POR :
    python run.py
 
 A aplicação esta rodando na porta  http://127.0.0.1:5000/ (http://127.0.0.1:5000/login) para começar.
+
+Gerenciamento de Tasks:
+Um usuario pode criar uma tarefa para si(Edita-la e exclui-la), ou o usuario pode criar uma task compartilhada para outros usuarios registrados, o user que foi marcado e o dono da tarefa poderam altera-la e exclui-la. Mas só o dono da tarefa compartilhada podera decidir quem tera acesso a tal tarefa.
 
 Rotas URL
 
